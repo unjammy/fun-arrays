@@ -82,7 +82,13 @@ var sumOfBankBalances = dataset.bankBalances.reduce( (mySum, account) => {
   take each `amount` and add 18.9% interest to it rounded to the nearest cent
   and then sum it all up into one value saved to `sumOfInterests`
  */
-var sumOfInterests = null;
+var sumOfInterests = dataset.bankBalances.filter( (account) => {
+  return account.state === 'WI' || account.state ==='IL' || account.state === 'WY' || account.state === 'OH' || account.state === 'GA' || account.state === 'DE';
+}).map( (account) => {
+  return Number( parseFloat(account.amount * 0.189).toFixed(2));
+}).reduce( (mySum, accountBalance) => {
+  return Number( parseFloat(mySum).toFixed(2) ) + accountBalance;
+} ,0);
 
 /*
   aggregate the sum of bankBalance amounts
