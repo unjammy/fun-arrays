@@ -106,7 +106,19 @@ var sumOfInterests = dataset.bankBalances.filter( (account) => {
     round this number to the nearest 10th of a cent before moving on.
   )
  */
-var stateSums = null;
+var stateSums = {};
+
+statesums = dataset.bankBalances.map(function(account){
+  stateSums[account.state] = 0;
+});
+
+statesums = dataset.bankBalances.map(function(account){
+  newVal = Number(parseFloat(account.amount));
+  if(  typeof newVal === 'number') {
+  stateSums[account.state] += newVal;
+  stateSums[account.state] = Number( parseFloat(stateSums[account.state]).toFixed(2) );
+  }
+});
 
 /*
   from each of the following states:
@@ -124,14 +136,38 @@ var stateSums = null;
     round this number to the nearest 10th of a cent before moving on.
   )
  */
-var sumOfHighInterests = null;
+var sumOfHighInterests = dataset.bankBalances.filter( (account) => {
+  return account.state !== 'WI' || account.state !=='IL' || account.state !== 'WY' || account.state !== 'OH' || account.state !== 'GA' || account.state !== 'DE';
+}).map( (account) => {
+  console.log(account.amount);
+  return Number( parseFloat(account.amount * 0.189).toFixed(2));
+}).filter( (balance) => {
+  return balance > 50000;
+}).reduce( (tally, balance) => {
+  return tally + balance;
+}, 0);
 
 /*
   set `lowerSumStates` to be an array of two letter state
   abbreviations of each state where the sum of amounts
   in the state is less than 1,000,000
  */
-var lowerSumStates = null;
+var lowerSumStates = {};
+lowerSumStates = dataset.bankBalances.map(function(account){
+  if(lowerSumStates.hasOwnProperty(account.state)){
+    lowerSumStates[account.state] += Number(parseFloat(account.amount));
+  } else {
+    lowerSumStates[account.state] = Number(parseFloat(account.amount));
+  }
+});
+lowerSumStates = dataset.bankBalances.map(function(account){
+  newBalance = Number(parseFloat(account.amount));
+  lowerSumStates[account.state] += newBalance;
+  lowerSumStates[account.state] = Number(parseFloat(lowerSumStates[account.state]).toFixed(2));
+});
+lowerSumStates = lowerSumStates.filter(function(state){
+  return state
+})
 
 /*
   aggregate the sum of each state into one hash table
